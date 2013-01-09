@@ -20,3 +20,5 @@ Thumbs.db
 # ignore node_modules since user can `npm install --dev`
 node_modules/
 
+_swap/
+

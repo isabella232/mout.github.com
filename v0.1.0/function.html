@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>mout / function : mout : Modular JavaScript Utilities</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets_/css/shCore.css">
+        <link rel="stylesheet" href="assets_/css/shThemeDefault.css">
+        <link rel="stylesheet" href="assets_/css/main.css">
+    </head>
+    <body data-root-path="">
+        <div id="wrapper">
+            <div id="content">
+
+<ul id="topnav">
+    <li><a href="index.html">Index</a></li>
+    <li><a href="#toc">TOC</a></li>
+    <li><a id="inject-link" href="#/inject" title="Inject modules into a 'utils' object on the global scope so you can use the browser console to test them.">Console<sup>?</sup></a></li>
+</ul>
+<h1>mout / function</h1>
+
+<p>Function<em>(al)</em> utilities.</p>
+
+<h2>Table of Contents <a href="#toc" name="toc" class="deep-link">#</a></h2>
+
+<ul>
+<li><a href="#bind">bind()</a></li>
+<li><a href="#compose">compose()</a></li>
+<li><a href="#curry">curry()</a></li>
+<li><a href="#debounce">debounce()</a></li>
+<li><a href="#func">func()</a></li>
+<li><a href="#prop">prop()</a></li>
+<li><a href="#series">series()</a></li>
+<li><a href="#throttle">throttle()</a></li>
+</ul>
+
+<h2>bind(fn, context, [...args]):Function <a href="#bind" id="bind" class="deep-link">#</a></h2>
+
+<p>Return a function that will execute in the given context, optionally adding any additional supplied parameters to the beginning of the arguments collection.</p>
+
+<h3>Arguments</h3>
+
+<ol>
+<li><code>fn</code> (Function)    : Target Function</li>
+<li><code>context</code> (Object) : Execution context (object used as <code>this</code>)</li>
+<li><code>[...args]</code> (*)    : Arguments (0...n arguments)</li>
+</ol>
+
+<p>See: <a href="#curry"><code>curry()</code></a></p>
+
+<h2>compose(...fn):Function <a href="#compose" id="compose" class="deep-link">#</a></h2>
+
+<p>Returns the composition of a list of functions, where each function consumes
+the return value of the function that follows. In math terms, composing the
+functions <code>f()</code>, <code>g()</code>, and <code>h()</code> produces <code>f(g(h()))</code>.</p>
+
+<pre class="brush:js">
+
+function add2(x) { return x + 2 }
+function multi2(x) { return x * 2 }
+map([1, 2, 3], compose(add2, multi2)); // [4, 6, 8]
+
+//same as
+map([1, 2, 3], function(x){
+    return add2( multi2(x) );
+});
+</pre>
+
+<h2>curry(fn, [...args]):Function <a href="#curry" id="curry" class="deep-link">#</a></h2>
+
+<p>Return a partially applied function supplying default arguments.</p>
+
+<p>This method is similar to <a href="#bind"><code>bind</code></a>, except it does not alter the this
+binding.</p>
+
+<h3>Arguments</h3>
+
+<ol>
+<li><code>fn</code> (Function)    : Target Function</li>
+<li><code>[...args]</code> (*)    : Arguments (0...n arguments)</li>
+</ol>
+
+<p>See: <a href="#bind"><code>bind()</code></a></p>
+
+<pre class="brush:js">
+
+function add(a, b){ return a + b }
+var add10 = curry(add, 10);
+console.log( add10(2) ); // 12
+</pre>
+
+<h2>debounce(fn, delay[, isAsap]):Function <a href="#debounce" id="debounce" class="deep-link">#</a></h2>
+
+<p>Creates a function that will delay the execution of <code>fn</code> until after <code>delay</code>
+milliseconds have elapsed since the last time it was invoked.</p>
+
+<p>Subsequent calls to the debounced function will return the result of the last
+<code>fn</code> call.</p>
+
+<pre class="brush:js">
+
+// sometimes less is more
+var lazyRedraw = debounce(redraw, 300);
+foo.on.resize.add(lazyRedraw);
+</pre>
+
+<p>In this visualization, <code>|</code> is a debounced-function call and <code>X</code> is the actual
+callback execution:</p>
+
+<pre><code>Default
+||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
+                         X                                 X
+
+Debounced with `isAsap == true`:
+||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
+X                                 X
+</code></pre>
+
+<p>See: <a href="#throttle"><code>throttle()</code></a></p>
+
+<h2>func(name):Function <a href="#func" id="func" class="deep-link">#</a></h2>
+
+<p>Returns a function that calls a method with given <code>name</code> on supplied object.
+Useful for iteration methods like <code>array/map</code> and <code>array/forEach</code>.</p>
+
+<p>See: <a href="#prop"><code>prop()</code></a></p>
+
+<pre class="brush:js">
+
+// will call the method `getName()` for each `user`
+var names = map(users, func('getName'));
+</pre>
+
+<h2>prop(name):Function <a href="#prop" id="prop" class="deep-link">#</a></h2>
+
+<p>Returns a function that gets a property with given <code>name</code> from supplied object.
+Useful for using in conjunction with <code>array/map</code> and/or for creating getters.</p>
+
+<p>See: <a href="array.html#pluck"><code>array/pluck()</code></a></p>
+
+<pre class="brush:js">
+
+var users = [{name:"John", age:21}, {name:"Jane", age:25}];
+// ["John", "Jane"]
+var names = map(users, prop('name'));
+</pre>
+
+<h2>series(...fn):Function <a href="#series" id="series" class="deep-link">#</a></h2>
+
+<p>Returns a function that will execute all the supplied functions in order and
+passing the same parameters to all of them. Useful for combining multiple
+<code>array/forEach</code> into a single one and/or for debugging.</p>
+
+<pre class="brush:js">
+
+// call `console.log()` and `doStuff()` for each item item in the array
+forEach(arr, series(console.log, doStuff));
+</pre>
+
+<h2>throttle(fn, interval):Function <a href="#throttle" id="throttle" class="deep-link">#</a></h2>
+
+<p>Creates a function that, when executed, will only call the <code>fn</code> function at
+most once per every <code>interval</code> milliseconds.</p>
+
+<p>If the throttled function is invoked more than once during the wait timeout,
+<code>fn</code> will also be called on the trailing edge of the timeout.</p>
+
+<p>Subsequent calls to the throttled function will return the result of the last
+<code>fn</code> call.</p>
+
+<pre class="brush:js">
+
+// sometimes less is more
+var lazyRedraw = throttle(redraw, 300);
+foo.on.resize.add(lazyRedraw);
+</pre>
+
+<p>In this visualization, <code>|</code> is a throttled-function call and <code>X</code> is the actual
+<code>fn</code> execution:</p>
+
+<pre><code>||||||||||||||||||||||||| (pause) |||||||||||||||||||||||||
+X    X    X    X    X    X        X    X    X    X    X    X
+</code></pre>
+
+<p>See: <a href="#debounce"><code>debounce()</code></a></p>
+
+<hr />
+
+<p>For more usage examples check specs inside <code>/tests</code> folder. Unit tests are the
+best documentation you can get...</p>
+                <hr />
+                <small>Documentation generated by <a href="https://github.com/millermedeiros/mdoc">mdoc</a>.</small>
+            </div>
+        </div>
+        <script src="assets_/js/lib/jquery.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shCore.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shAutoloader.js"></script>
+        <script src="assets_/js/main.js"></script>
+    </body>
+</html>
+

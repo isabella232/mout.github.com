@@ -1,0 +1,22 @@
+# =======
+# default
+# =======
+
+.tmp*
+.project
+.settings/
+.livereload
+
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+
+# ================
+# project specific
+# ================
+
+# ignore node_modules since user can `npm install --dev`
+node_modules/
+

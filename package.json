@@ -1,0 +1,19 @@
+{
+  "private" : true,
+  "name": "mout-doc",
+  "version": "0.0.0",
+  "description": "mout documentation",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mout/mout.github.com.git"
+  },
+  "keywords": [
+    "mout"
+  ],
+  "author": "Miller Medeiros <contact@millermedeiros.com>",
+  "license": "MIT",
+  "devDependencies" : {
+    "mdoc" : "~0.3.2"
+  }
+}

@@ -17,16 +17,17 @@
 </a>
 <h1>mout</h1>
 
-<p><a href="https://travis-ci.org/mout/mout"><img src="https://secure.travis-ci.org/mout/mout.png" alt="Build Status" title="" /></a></p>
-
-<p><a href='http://mout.github.com/mout'>http://mout.github.com/mout</a></p>
-
 <p>Modular JavaScript Utilities.</p>
+
+<p><a href='http://mout.github.com/'>http://mout.github.com/</a></p>
+
+<p><a href="https://travis-ci.org/mout/mout"><img src="https://secure.travis-ci.org/mout/mout.png" alt="Build Status" title="" /></a></p>
 
 <p>All code is library agnostic and consist mostly of helper methods that aren't
 directly related with the DOM, the purpose of this library isn't to replace
 Dojo, jQuery, YUI, Mootools, etc, but to provide modular solutions for common
-problems that aren't solved by most of them.</p>
+problems that aren't solved by most of them. Consider it as a crossbrowser
+JavaScript standard library.</p>
 
 <h2>Main goals</h2>
 
@@ -40,7 +41,8 @@ problems that aren't solved by most of them.</p>
 <li><strong>don't convert JavaScript into another language!</strong></li>
 <li>be compatible with other frameworks;</li>
 <li>be modular;</li>
-<li>have unit tests for all modules.</li>
+<li>have unit tests for all modules;</li>
+<li>work on multiple environments (IE7+, modern browsers, node.js);</li>
 </ul>
 
 <h2>What shouldn't be here</h2>
@@ -50,6 +52,7 @@ problems that aren't solved by most of them.</p>
 <li>CSS selector engine;</li>
 <li>Event system - pub/sub;</li>
 <li>Template engine;</li>
+<li>Anything that isn't generic enough to be on a standard library;</li>
 <li>Anything that could be a separate library and/or isn't a modular utility...</li>
 </ul>
 
@@ -164,18 +167,19 @@ coverage (but should be close to it).</p>
 <h3>Building The Documentation</h3>
 
 <p>The documentation is generated based on markdown files inside the
-<code>doc/mdown</code> folder using <a href="https://github.com/millermedeiros/mdoc">mdoc</a>.
+<code>doc</code> folder using <a href="https://github.com/millermedeiros/mdoc">mdoc</a>.
 To compile the docs run:</p>
 
 <pre><code>node build doc
 </code></pre>
 
-<p>It will replace all the files inside the <code>doc/html</code> folder.</p>
+<p>It will replace all the files inside the <code>doc_html</code> folder.</p>
 
 <p>Documentation files should be always up-to-date since modules are only
-committed to the <code>master</code> branch after they get proper tests and documentation.</p>
+committed to the <code>master</code> branch after they get proper tests and documentation.
+Online documentation can be found at <a href='http://mout.github.com/docs/'>http://mout.github.com/docs/</a></p>
 
-<h2>Why AMD?</h2>
+<h2>Why AMD as the authoring format?</h2>
 
 <p><strong>Because AMD is awesome!</strong></p>
 
@@ -208,7 +212,7 @@ apps. The opposite approach would be harder to automate.</p>
 
 <h2>Documentation</h2>
 
-<p>Online documentation can be found at <a href='http://mout.github.com/mout'>http://mout.github.com/mout</a> or inside the
+<p>Online documentation can be found at <a href='http://mout.github.com/docs'>http://mout.github.com/docs</a> or inside the
 <code>doc</code> folder.</p>
 
 <h2>License</h2>

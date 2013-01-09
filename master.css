@@ -25,3 +25,11 @@ small{color:#888}
 small a{color:#888}
 pre{background:#eee; color:#444; border:1px solid #ccc; padding:15px}
 code{font-weight:bold; font-size:1.2em}
+
+#logo {
+    display: block;
+    width: 194px;
+    height: 100px;
+    background: url(logo.png) no-repeat center center;
+    text-indent: -999em;
+}

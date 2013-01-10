@@ -1,4 +1,4 @@
-# mout documentation page
+# mout project page / documentation
 
-http://mout.github.com/
+http://moutjs.com/
 

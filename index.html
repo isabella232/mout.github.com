@@ -50,7 +50,7 @@
             <h3>Example</h3>
             <p>Each method is a separate module, so you can require only the methods that you need or a whole package:</p>
 
-<pre class="syntax"><span class="c1">// you can load individual methods</span>
+<pre class="syntax"><span class="c1">// you can load individual methods (recommended)</span>
 <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mout/array/map'</span><span class="p">);</span>
 <span class="nx">map</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span> <span class="k">return</span> <span class="nx">val</span> <span class="o">*</span> <span class="nx">val</span><span class="p">;</span> <span class="p">});</span> <span class="c1">// [1, 4]</span>
 
@@ -59,8 +59,8 @@
 <span class="nx">stringUtils</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">'Foo Bar'</span><span class="p">);</span> <span class="c1">// "fooBar"</span>
 
 <span class="c1">// or the whole lib</span>
-<span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mout'</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">math</span><span class="p">.</span><span class="nx">clamp</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// 10</span>
+<span class="kd">var</span> <span class="nx">mout</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mout'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">mout</span><span class="p">.</span><span class="nx">math</span><span class="p">.</span><span class="nx">clamp</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// 10</span>
 </pre>
 
             <h3>API Documentation</h3>

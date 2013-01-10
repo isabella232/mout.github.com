@@ -27,6 +27,8 @@
                 <h2>Modular JavaScript Utilities</h2>
             </a>
 
+            <a class="build-status" href="https://travis-ci.org/mout/mout"><img src="https://travis-ci.org/mout/mout.png?branch=master" alt="Build Status" style="max-width:100%;"></a>
+
             <div id="intro">
                 <p>
                     <strong>mout</strong> is a collection of modular JavaScript
@@ -37,20 +39,38 @@
                 </p>
 
                 <p>
-                    The biggest difference between other existing solutions is that
-                    you can load only the modules/functions that you need, no extra
-                    overhead or complex build systems required. All batteries
-                    included.
+                    The biggest difference between other existing solutions is
+                    that you can choose to load only the modules/functions that
+                    you need, no extra overhead or complex build systems
+                    required. It also provides a clean and consitent API. All
+                    batteries included.
                 </p>
             </div>
 
-            <h3>Documentation</h3>
-            <p>For more info and documentation:</p>
+            <h3>Example</h3>
+            <p>Each method is a separate module, so you can require only the methods that you need or a whole package:</p>
+
+<pre class="syntax"><span class="c1">// you can load individual methods</span>
+<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mout/array/map'</span><span class="p">);</span>
+<span class="nx">map</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span> <span class="k">return</span> <span class="nx">val</span> <span class="o">*</span> <span class="nx">val</span><span class="p">;</span> <span class="p">});</span> <span class="c1">// [1, 4]</span>
+
+<span class="c1">// a single package</span>
+<span class="kd">var</span> <span class="nx">stringUtils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mout/string'</span><span class="p">);</span>
+<span class="nx">stringUtils</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">'Foo Bar'</span><span class="p">);</span> <span class="c1">// "fooBar"</span>
+
+<span class="c1">// or the whole lib</span>
+<span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mout'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">math</span><span class="p">.</span><span class="nx">clamp</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// 10</span>
+</pre>
+
+            <h3>API Documentation</h3>
             <ul>
                 <li><a href="./docs/latest">latest</a></li>
                 <li><a href="./docs/v0.1.0">v0.1.0</a></li>
             </ul>
 
+            <h3>Wiki</h3>
+            <p>For info about how to become a contributor, project decisions, migration tips, use the <a href="https://github.com/mout/mout/wiki">wiki as a reference</a>.</p>
 
             <h3>Download</h3>
 
@@ -61,16 +81,22 @@
             <pre><code>bower install mout</code></pre>
 
             <p>
-                you can also download the AMD source files directly from github
-                as <a href="http://github.com/mout/mout/zipball/master">zip</a>
-                or <a href="http://github.com/mout/mout/tarball/master">tar</a>.
+                you can also download the source files <a href="https://github.com/mout/mout/tags">directly from github</a>
+                and/or clone the git repository:
             </p>
-
-            <p>or clone the git repository directly:</p>
             <pre><code>git clone https://github.com/mout/mout.git</code></pre>
 
-            <h3>Author</h3>
-            <p>This project is a fork of amd-utils, original work done by <a href="http://blog.millermedeiros.com">Miller Medeiros</a> and multiple contributors.</p>
+            <h3>Author / Contributors</h3>
+
+            <p>
+                This project was formerly known as amd-utils <small>(original work done by <a href="http://blog.millermedeiros.com">Miller Medeiros</a>)</small>
+                and have <a href="https://github.com/mout/mout/graphs/contributors">multiple contributors</a>.
+            </p>
+            <p>
+                It borrows features and is inspired by multiple open source projects like the PHP, python and Ruby
+                standard libraries, underscore.js, lodash, prototype.js and many others but some similarities are
+                just pure coincidence.
+            </p>
 
             <h3>License</h3>
             <p>Released under the <a href="http://opensource.org/licenses/MIT">MIT license</a>.</p>

@@ -4,7 +4,7 @@
 # a backup inside of it. That way we can keep online version of old docs.
 
 git clone https://github.com/mout/mout.git --depth 1 _swap
-rm -rf docs/latest
-node node_modules/mdoc/bin/mdoc -i _swap/doc -o docs/latest --title "mout : Modular JavaScript Utilities" --index _swap/README.md --template template
+rm -rf docs/edge
+node node_modules/mdoc/bin/mdoc -i _swap/doc -o docs/edge --title "mout : Modular JavaScript Utilities" --index _swap/README.md --template template
 rm -rf _swap
 

@@ -7,6 +7,16 @@
         <link rel="stylesheet" href="assets_/css/shCore.css">
         <link rel="stylesheet" href="assets_/css/shThemeDefault.css">
         <link rel="stylesheet" href="assets_/css/main.css">
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-1247729-20']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
     </head>
     <body data-root-path="">
         <div id="wrapper">
@@ -24,7 +34,7 @@
 <h2>Table of Contents <a href="#toc" name="toc" class="deep-link">#</a></h2>
 
 <ul>
-<li><a href="#clone">clone()</a></li>
+<li><a href="#deepClone">deepClone()</a></li>
 <li><a href="#createObject">createObject()</a></li>
 <li><a href="#ctorApply">ctorApply()</a></li>
 <li><a href="#defaults">defaults()</a></li>
@@ -41,6 +51,7 @@
 <li><a href="#isNull">isNull()</a></li>
 <li><a href="#isNumber">isNumber()</a></li>
 <li><a href="#isObject">isObject()</a></li>
+<li><a href="#isPlainObject">isPlainObject()</a></li>
 <li><a href="#isRegExp">isRegExp()</a></li>
 <li><a href="#isString">isString()</a></li>
 <li><a href="#isUndefined">isUndefined()</a></li>
@@ -48,26 +59,37 @@
 <li><a href="#toArray">toArray()</a></li>
 </ul>
 
-<h2>clone(val):* <a href="#clone" id="clone" class="deep-link">#</a></h2>
+<h2>deepClone(val, [instanceClone]):* <a href="#deepClone" id="deepClone" class="deep-link">#</a></h2>
 
 <p>Deep clone native types like Object, Array, RegExp, Date and primitives.</p>
+
+<p>The <code>instanceClone</code> function will be invoked to clone objects that are not
+"plain" objects (as defined by <a href="#isPlainObject"><code>isPlainObject</code></a>) if it is
+provided. If <code>instanceClone</code> is not specified, it will not attempt to clone
+non-plain objects, and will copy the object reference.</p>
 
 <h3>Example</h3>
 
 <pre class="brush:js">
 
 var a = {foo:'bar', obj: {a:1, b:2}};
-var b = clone(a); // {foo:'bar', obj: {a:1, b:2}}
+var b = deepClone(a); // {foo:'bar', obj: {a:1, b:2}}
 console.log( a === b ); // false
 console.log( a.obj === b.obj ); // false
 
 var c = [1, 2, [3, 4]];
-var d = clone(c); // [1, 2, [3, 4]]
+var d = deepClone(c); // [1, 2, [3, 4]]
 var e = c.concat(); // [1, 2, [3, 4]]
 
 console.log( c[2] === d[2] ); // false
 // concat doesn't do a deep clone, arrays are passed by reference
 console.log( e[2] === d[2] ); // true
+
+function Custom() { }
+function cloneCustom(x) { return new Custom(); }
+var f = { test: new Custom() };
+var g = deepClone(f, cloneCustom);
+g.test === f.test // false, since new Custom instance will be created
 </pre>
 
 <h2>createObject(parent, [props]):Object <a href="#createObject" id="createObject" class="deep-link">#</a></h2>
@@ -236,6 +258,10 @@ isKind(3, 'Number');    // true
 <h2>isObject(val):Boolean <a href="#isObject" id="isObject" class="deep-link">#</a></h2>
 
 <p>If value is an Object.</p>
+
+<h2>isPlainObject(val):Boolean <a href="#isPlainObject" id="isPlainObject" class="deep-link">#</a></h2>
+
+<p>If the value is an Object created by the Object constructor.</p>
 
 <h2>isRegExp(val):Boolean <a href="#isRegExp" id="isRegExp" class="deep-link">#</a></h2>
 

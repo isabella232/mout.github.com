@@ -22,3 +22,6 @@ node_modules/
 
 _swap/
 
+# let's ignore the "edge" folder for now since we can't automate it properly
+docs/edge/
+

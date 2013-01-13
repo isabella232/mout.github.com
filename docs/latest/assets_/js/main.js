@@ -8,7 +8,7 @@
 
 
     var DEFAULT_BRUSH = 'js',
-        VERSION_TAG = 'v0.1.0',
+        VERSION_TAG = 'v0.2.0',
         _srcUrl = 'https://github.com/mout/mout/blob/'+ VERSION_TAG +'/src/',
         _specsUrl = 'https://github.com/mout/mout/blob/'+ VERSION_TAG +'/tests/spec/',
         _rawUrl = 'https://raw.github.com/mout/mout/'+ VERSION_TAG +'/src',

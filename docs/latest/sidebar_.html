@@ -311,8 +311,8 @@ functions <code>f()</code>, <code>g()</code>, and <code>h()</code> produces <cod
             <h3 class="toc-mod-title"><a href="lang.html">lang</a></h3>
             <div class="toc-list">
                 
-                <a class="toc-item" href="lang.html#clone">
-                    <h4>clone(val):*</h4>
+                <a class="toc-item" href="lang.html#deepClone">
+                    <h4>deepClone(val, [instanceClone]):*</h4>
                     <span class="desc">Deep clone native types like Object, Array, RegExp, Date and primitives.</span>
                 </a>
                 
@@ -394,6 +394,11 @@ functions <code>f()</code>, <code>g()</code>, and <code>h()</code> produces <cod
                 <a class="toc-item" href="lang.html#isObject">
                     <h4>isObject(val):Boolean</h4>
                     <span class="desc">If value is an Object.</span>
+                </a>
+                
+                <a class="toc-item" href="lang.html#isPlainObject">
+                    <h4>isPlainObject(val):Boolean</h4>
+                    <span class="desc">If the value is an Object created by the Object constructor.</span>
                 </a>
                 
                 <a class="toc-item" href="lang.html#isRegExp">
@@ -568,7 +573,7 @@ functions <code>f()</code>, <code>g()</code>, and <code>h()</code> produces <cod
                 
                 <a class="toc-item" href="object.html#deepMixIn">
                     <h4>deepMixIn(target, ...objects):Object</h4>
-                    <span class="desc">Mixes objects into the target object, recursively mixing existing child objects and arrays as well.</span>
+                    <span class="desc">Mixes objects into the target object, recursively mixing existing child objects as well.</span>
                 </a>
                 
                 <a class="toc-item" href="object.html#every">

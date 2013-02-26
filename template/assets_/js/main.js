@@ -11,7 +11,7 @@
         VERSION_TAG = 'master',
         _srcUrl = 'https://github.com/mout/mout/blob/'+ VERSION_TAG +'/src/',
         _specsUrl = 'https://github.com/mout/mout/blob/'+ VERSION_TAG +'/tests/spec/',
-        _rawUrl = 'https://raw.github.com/mout/mout/'+ VERSION_TAG +'/src',
+        _rawUrl = 'https://rawgithub.com/mout/mout/'+ VERSION_TAG +'/src',
         _curPath = document.location.pathname.split('/'),
         _curFile = _curPath[_curPath.length - 1],
         _curPackage = _curFile.split('.')[0],

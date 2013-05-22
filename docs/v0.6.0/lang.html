@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>lang : mout : Modular JavaScript Utilities</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets_/css/shCore.css">
+        <link rel="stylesheet" href="assets_/css/shThemeDefault.css">
+        <link rel="stylesheet" href="assets_/css/main.css">
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-1247729-20']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+    </head>
+    <body data-root-path="">
+        <div id="wrapper">
+            <div id="content">
+
+<ul id="topnav">
+    <li><a href="index.html">Index</a></li>
+    <li><a href="#toc">TOC</a></li>
+    <li><a id="inject-link" href="#/inject" title="Inject modules into a 'mout' object on the global scope so you can use the browser console to test them.">Console<sup>?</sup></a></li>
+</ul>
+<h1>lang</h1>
+
+<p>Language Utilities. Easier inheritance, scope handling, type checks.</p>
+
+<h2>Table of Contents <a href="#toc" name="toc" class="deep-link">#</a></h2>
+
+<ul>
+<li><a href="#clone">clone()</a></li>
+<li><a href="#createObject">createObject()</a></li>
+<li><a href="#ctorApply">ctorApply()</a></li>
+<li><a href="#deepClone">deepClone()</a></li>
+<li><a href="#defaults">defaults()</a></li>
+<li><a href="#inheritPrototype">inheritPrototype()</a></li>
+<li><a href="#is">is()</a></li>
+<li><a href="#isnt">isnt()</a></li>
+<li><a href="#isArguments">isArguments()</a></li>
+<li><a href="#isArray">isArray()</a></li>
+<li><a href="#isBoolean">isBoolean()</a></li>
+<li><a href="#isDate">isDate()</a></li>
+<li><a href="#isEmpty">isEmpty()</a></li>
+<li><a href="#isFinite">isFinite()</a></li>
+<li><a href="#isFunction">isFunction()</a></li>
+<li><a href="#isKind">isKind()</a></li>
+<li><a href="#isInteger">isInteger()</a></li>
+<li><a href="#isNaN">isNaN()</a></li>
+<li><a href="#isNull">isNull()</a></li>
+<li><a href="#isNumber">isNumber()</a></li>
+<li><a href="#isObject">isObject()</a></li>
+<li><a href="#isPlainObject">isPlainObject()</a></li>
+<li><a href="#isRegExp">isRegExp()</a></li>
+<li><a href="#isString">isString()</a></li>
+<li><a href="#isUndefined">isUndefined()</a></li>
+<li><a href="#kindOf">kindOf()</a></li>
+<li><a href="#toArray">toArray()</a></li>
+<li><a href="#toString">toString()</a></li>
+</ul>
+
+<h2>clone(val):* <a href="#clone" id="clone" class="deep-link">#</a></h2>
+
+<p>Clone native types like Object, Array, RegExp, Date and primitives.</p>
+
+<p>This method will not clone values that are referenced within <code>val</code>. It will
+only copy the value reference to the new value. If the value is not a plain
+object but is an object, it will return the value unchanged.</p>
+
+<h3>Example</h3>
+
+<pre class="brush:js">
+
+var a = { foo: 'bar' };
+var b = clone(a);
+console.log(a === b); // false
+console.log(a.foo === b.foo); // true
+
+var c = [1, 2, 3];
+var d = clone(b);
+console.log(c === d); // false
+console.log(c); // [1, 2, 3]
+</pre>
+
+<p>See: <a href="#deepClone"><code>deepClone()</code></a></p>
+
+<h2>createObject(parent, [props]):Object <a href="#createObject" id="createObject" class="deep-link">#</a></h2>
+
+<p>Create Object using prototypal inheritance and setting custom properties.</p>
+
+<p>Mix between <a href="http://javascript.crockford.com/prototypal.html">Douglas Crockford Prototypal Inheritance</a> and the EcmaScript 5 <code>Object.create()</code> method.</p>
+
+<h3>Arguments</h3>
+
+<ol>
+<li><code>parent</code> (Object)  : Parent Object</li>
+<li><code>[props]</code> (Object) : Object properties</li>
+</ol>
+
+<h3>Example</h3>
+
+<pre class="brush:js">
+
+var base = {
+    trace : function(){
+        console.log(this.name);
+    }
+};
+
+var myObj = createObject(base, {
+    name : 'Lorem Ipsum'
+});
+
+myObject.trace(); // "Lorem Ipsum"
+</pre>
+
+<h2>ctorApply(constructor, args):Object <a href="#ctorApply" id="ctorApply" class="deep-link">#</a></h2>
+
+<p>Do <code>Function.prototype.apply()</code> on a constructor while maintaining prototype
+chain.</p>
+
+<pre class="brush:js">
+
+function Person(name, surname) {
+    this.name = name;
+    this.surname = surname;
+}
+
+Person.prototype.walk = function(){
+    console.log(this.name +' is walking');
+};
+
+var args = ['John', 'Doe'];
+
+// "similar" effect as calling `new Person("John", "Doe")`
+var john = ctorApply(Person, args);
+john.walk(); // "John is walking"
+</pre>
+
+<h2>deepClone(val, [instanceClone]):* <a href="#deepClone" id="deepClone" class="deep-link">#</a></h2>
+
+<p>Deep clone native types like Object, Array, RegExp, Date and primitives.</p>
+
+<p>The <code>instanceClone</code> function will be invoked to clone objects that are not
+"plain" objects (as defined by <a href="#isPlainObject"><code>isPlainObject</code></a>) if it is
+provided. If <code>instanceClone</code> is not specified, it will not attempt to clone
+non-plain objects, and will copy the object reference.</p>
+
+<h3>Example</h3>
+
+<pre class="brush:js">
+
+var a = {foo:'bar', obj: {a:1, b:2}};
+var b = deepClone(a); // {foo:'bar', obj: {a:1, b:2}}
+console.log( a === b ); // false
+console.log( a.obj === b.obj ); // false
+
+var c = [1, 2, [3, 4]];
+var d = deepClone(c); // [1, 2, [3, 4]]
+var e = c.concat(); // [1, 2, [3, 4]]
+
+console.log( c[2] === d[2] ); // false
+// concat doesn't do a deep clone, arrays are passed by reference
+console.log( e[2] === d[2] ); // true
+
+function Custom() { }
+function cloneCustom(x) { return new Custom(); }
+var f = { test: new Custom() };
+var g = deepClone(f, cloneCustom);
+g.test === f.test // false, since new Custom instance will be created
+</pre>
+
+<p>See: <a href="#clone"><code>clone()</code></a></p>
+
+<h2>defaults(val, ...defaults):void <a href="#defaults" id="defaults" class="deep-link">#</a></h2>
+
+<p>Return first value that isn't <code>null</code> or <code>undefined</code>.</p>
+
+<pre><code>function doSomethingAwesome(foo, bar) {
+    // default arguments
+    foo = defaults(foo, 'lorem');
+    bar = defaults(bar, 123);
+    // ...
+}
+</code></pre>
+
+<h2>inheritPrototype(child, parent):void <a href="#inheritPrototype" id="inheritPrototype" class="deep-link">#</a></h2>
+
+<p>Inherit prototype from another Object.</p>
+
+<pre class="brush:js">
+
+function Foo(name){
+    this.name = name;
+}
+Foo.prototype = {
+    getName : function(){
+        return this.name;
+    }
+};
+
+function Bar(name){
+    this.name = name;
+}
+//should be called before calling constructor
+inheritPrototype(Bar, Foo);
+
+var myObj = new Bar('lorem ipsum');
+myObj.getName(); // "lorem ipsum"
+</pre>
+
+<h2>is(x, y):Boolean <a href="#is" id="is" class="deep-link">#</a></h2>
+
+<p>Check if both values are identical/egal.</p>
+
+<pre class="brush:js">
+
+// wtfjs
+NaN === NaN; // false
+-0 === +0;   // true
+
+is(NaN, NaN); // true
+is(-0, +0);   // false
+is('a', 'b'); // false
+</pre>
+
+<p>See: <a href="#isnt"><code>isnt()</code></a></p>
+
+<h2>isnt(x, y):Boolean <a href="#isnt" id="isnt" class="deep-link">#</a></h2>
+
+<p>Check if both values are not identical/egal.</p>
+
+<pre class="brush:js">
+
+// wtfjs
+NaN === NaN; // false
+-0 === +0;   // true
+
+isnt(NaN, NaN); // false
+isnt(-0, +0);   // true
+isnt('a', 'b'); // true
+</pre>
+
+<p>See: <a href="#is"><code>is()</code></a></p>
+
+<h2>isArguments(val):Boolean <a href="#isArguments" id="isArguments" class="deep-link">#</a></h2>
+
+<p>If value is an "Arguments" object.</p>
+
+<h2>isArray(val):Boolean <a href="#isArray" id="isArray" class="deep-link">#</a></h2>
+
+<p>If value is an Array. Uses native ES5 <code>Array.isArray()</code> if available.</p>
+
+<h2>isBoolean(val):Boolean <a href="#isBoolean" id="isBoolean" class="deep-link">#</a></h2>
+
+<p>If value is a Boolean.</p>
+
+<h2>isDate(val):Boolean <a href="#isDate" id="isDate" class="deep-link">#</a></h2>
+
+<p>If value is a Date.</p>
+
+<h2>isEmpty(val):Boolean <a href="#isEmpty" id="isEmpty" class="deep-link">#</a></h2>
+
+<p>Checks if Array/Object/String is empty.</p>
+
+<pre class="brush:js">
+
+isEmpty('');         // true
+isEmpty('bar');      // false
+isEmpty([]);         // true
+isEmpty([1, 2]);     // false
+isEmpty({});         // true
+isEmpty({a:1, b:2}); // false
+</pre>
+
+<h2>isFinite(val):Boolean <a href="#isFinite" id="isFinite" class="deep-link">#</a></h2>
+
+<p>Checks if value is Finite.</p>
+
+<p>Note: This is not the same as native <code>isFinite</code>, which will return <code>true</code> for
+booleans and empty strings. See <a href='http://es5.github.com/#x15.1.2.5'>http://es5.github.com/#x15.1.2.5</a>.</p>
+
+<h2>isFunction(val):Boolean <a href="#isFunction" id="isFunction" class="deep-link">#</a></h2>
+
+<p>If value is a Function.</p>
+
+<h2>isKind(val, kind):Boolean <a href="#isKind" id="isKind" class="deep-link">#</a></h2>
+
+<p>If value is of "kind". (used internally by some of the <em>isSomething</em> checks).</p>
+
+<p>Favor the other methods since strings are commonly mistyped and also because
+some "kinds" can only be accurately checked by using other methods (e.g.
+<code>Arguments</code>), some of the other checks are also faster.</p>
+
+<pre class="brush:js">
+
+isKind([1,2], 'Array'); // true
+isKind(3, 'Array');     // false
+isKind(3, 'Number');    // true
+</pre>
+
+<p>See: <a href="#kindOf"><code>kindOf()</code></a></p>
+
+<h2>isInteger(val):Boolean <a href="#isInteger" id="isInteger" class="deep-link">#</a></h2>
+
+<p>Check if value is an integer.</p>
+
+<pre class="brush:js">
+
+isInteger(123);    // true
+isInteger(123.45); // false
+isInteger({});     // false
+isInteger('foo');  // false
+isInteger('123');  // false
+</pre>
+
+<h2>isNaN(val):Boolean <a href="#isNaN" id="isNaN" class="deep-link">#</a></h2>
+
+<p>Check if value is <code>NaN</code>.</p>
+
+<p>Note: This is not the same as native <code>isNaN</code>, which will return <code>true</code> for
+<code>undefined</code> and other values. See <a href="http://es5.github.com/#x15.1.2.4">ES5 isNaN</a></p>
+
+<h2>isNull(val):Boolean <a href="#isNull" id="isNull" class="deep-link">#</a></h2>
+
+<p>If value is <code>null</code>.</p>
+
+<h2>isNumber(val):Boolean <a href="#isNumber" id="isNumber" class="deep-link">#</a></h2>
+
+<p>If value is a Number.</p>
+
+<h2>isObject(val):Boolean <a href="#isObject" id="isObject" class="deep-link">#</a></h2>
+
+<p>If value is an Object.</p>
+
+<h2>isPlainObject(val):Boolean <a href="#isPlainObject" id="isPlainObject" class="deep-link">#</a></h2>
+
+<p>If the value is an Object created by the Object constructor.</p>
+
+<h2>isRegExp(val):Boolean <a href="#isRegExp" id="isRegExp" class="deep-link">#</a></h2>
+
+<p>If value is a RegExp.</p>
+
+<h2>isString(val):Boolean <a href="#isString" id="isString" class="deep-link">#</a></h2>
+
+<p>If value is a String.</p>
+
+<h2>isUndefined(val):Boolean <a href="#isUndefined" id="isUndefined" class="deep-link">#</a></h2>
+
+<p>If value is <code>undefined</code>.</p>
+
+<h2>kindOf(val):String <a href="#kindOf" id="kindOf" class="deep-link">#</a></h2>
+
+<p>Gets kind of value (e.g. "String", "Number", "RegExp", "Null", "Date").
+Used internally by <code>isKind()</code> and most of the other <em>isSomething</em> checks.</p>
+
+<pre class="brush:js">
+
+kindOf([1,2]); // "Array"
+kindOf('foo'); // "String"
+kindOf(3);     // "Number"
+</pre>
+
+<p>See: <a href="#isKind"><code>isKind()</code></a></p>
+
+<h2>toArray(val):Array <a href="#toArray" id="toArray" class="deep-link">#</a></h2>
+
+<p>Convert array-like object into Array or wrap value into Array.</p>
+
+<pre class="brush:js">
+
+toArray({
+    "0" : "foo",
+    "1" : "bar",
+    "length" : 2
+});                              // ["foo", "bar"]
+
+function foo(){
+    return toArray(arguments);
+}
+foo("lorem", 123);               // ["lorem", 123]
+
+toArray("lorem ipsum");          // ["lorem ipsum"]
+toArray(window);                 // [window]
+toArray({foo:"bar", lorem:123}); // [{foo:"bar", lorem:123}]
+</pre>
+
+<p>See: object/values()</p>
+
+<h2>toString(val):String <a href="#toString" id="toString" class="deep-link">#</a></h2>
+
+<p>Convert any value to its string representation.</p>
+
+<p>Will return an empty string for <code>undefined</code> or <code>null</code>, otherwise will convert
+the value to its string representation.</p>
+
+<hr />
+
+<p>For more usage examples check specs inside <code>/tests</code> folder. Unit tests are the
+best documentation you can get...</p>
+                <hr />
+                <small>Documentation generated by <a href="https://github.com/millermedeiros/mdoc">mdoc</a>.</small>
+            </div>
+        </div>
+        <script src="assets_/js/lib/jquery.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shCore.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shAutoloader.js"></script>
+        <script src="assets_/js/main.js"></script>
+    </body>
+</html>
+

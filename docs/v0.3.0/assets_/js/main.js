@@ -55,6 +55,7 @@
         }
 
         function toggleNavOnClick(evt) {
+            evt.preventDefault();
             var $el = $(this);
             $el.toggleClass('opened');
             $el.next('.toc-list').stop(true, true).slideToggle(300);

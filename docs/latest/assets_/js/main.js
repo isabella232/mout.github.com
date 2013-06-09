@@ -133,19 +133,30 @@
     // ---
 
     var settings = {
+        defaultValues : {
+            'showDescription' : 'false'
+        },
 
-        init : function(key, defaultValue){
+        init : function(key){
             if (settings.get(key) == null) {
-                settings.set(key, defaultValue)
+                settings.set(key)
             }
         },
 
         get : function(key){
-            return localStorage.getItem(key);
+            var value = settings.defaultValues[key];
+            // localStorage doesn't work on IE8 w/ local files or iOS5 private browsing
+            // so we wrap into try/catch to avoid errors
+            try {
+            value = localStorage.getItem(key);
+            } catch(e){}
+            return value;
         },
 
         set : function(key, value){
+            try {
             localStorage.setItem(key, value);
+            } catch(e){}
         },
 
         toggle : function(key, alphaValue, betaValue ){

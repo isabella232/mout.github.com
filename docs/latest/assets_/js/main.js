@@ -46,8 +46,8 @@
 
             $_tocList.slideUp(0);
             $_sidebar.on('click', 'h3', toggleNavOnClick);
-            $('#show-desc').on('change', toggleDescription);
-            toggleDescription();
+
+            description.init();
             $_search.on('keyup blur', filterOnSearch);
 
             $_sidebar.find('.toc-mod-title:has(a[href*="'+ _curFile +'"])').click();
@@ -59,10 +59,6 @@
             var $el = $(this);
             $el.toggleClass('opened');
             $el.next('.toc-list').stop(true, true).slideToggle(300);
-        }
-
-        function toggleDescription() {
-            $_toc.find('.desc').toggleClass('hidden');
         }
 
         function filterOnSearch(evt) {
@@ -98,6 +94,80 @@
         };
 
     }());
+
+
+    // ---
+
+    var description = (function(){
+
+        var $_showDesc,
+            $_descriptions;
+
+        function init(){
+            $_showDesc = $('#show-desc');
+            $_descriptions = $('#sidebar').find('.toc').find('.desc');
+            $_showDesc.on('change', toggleDescription);
+            if(!(settings.get('showDescription') === 'true')) {
+                settings.init('showDescription', false);
+                toggleDescriptionVisibility();
+                return;
+            }
+            $_showDesc[0].checked = true;
+        }
+
+        function toggleDescription(){
+            settings.toggle('showDescription', 'true', 'false');
+            toggleDescriptionVisibility();
+        }
+
+        function toggleDescriptionVisibility(){
+            $_descriptions.toggleClass('hidden');
+        }
+
+        return {
+            init: init
+        };
+    })();
+
+
+    // ---
+
+    var settings = {
+        defaultValues : {
+            'showDescription' : 'false'
+        },
+
+        init : function(key){
+            if (settings.get(key) == null) {
+                settings.set(key)
+            }
+        },
+
+        get : function(key){
+            var value = settings.defaultValues[key];
+            // localStorage doesn't work on IE8 w/ local files or iOS5 private browsing
+            // so we wrap into try/catch to avoid errors
+            try {
+            value = localStorage.getItem(key);
+            } catch(e){}
+            return value;
+        },
+
+        set : function(key, value){
+            try {
+            localStorage.setItem(key, value);
+            } catch(e){}
+        },
+
+        toggle : function(key, alphaValue, betaValue ){
+            if(settings.get(key) === alphaValue) {
+                settings.set(key, betaValue);
+                return; 
+            }
+            settings.set(key, alphaValue);
+        }
+
+    };
 
 
     // ---

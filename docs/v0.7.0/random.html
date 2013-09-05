@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>random : mout : Modular JavaScript Utilities</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets_/css/shCore.css">
+        <link rel="stylesheet" href="assets_/css/shThemeDefault.css">
+        <link rel="stylesheet" href="assets_/css/main.css">
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-1247729-20']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+    </head>
+    <body data-root-path="">
+        <div id="wrapper">
+            <div id="content">
+
+<ul id="topnav">
+    <li><a href="index.html">Index</a></li>
+    <li><a href="#toc">TOC</a></li>
+    <li><a id="inject-link" href="#/inject" title="Inject modules into a 'mout' object on the global scope so you can use the browser console to test them.">Console<sup>?</sup></a></li>
+</ul>
+<h1>random</h1>
+
+<p>Pseudo-random generators.</p>
+
+<p>mout uses <code>Math.random</code> by default on all the pseudo-random generators, if
+you need a seeded random or a better algorithm see the <a href="#random"><code>random()</code></a>
+documentation for instructions.</p>
+
+<h2>Table of Contents <a href="#toc" name="toc" class="deep-link">#</a></h2>
+
+<ul>
+<li><a href="#choice">choice()</a></li>
+<li><a href="#guid">guid()</a></li>
+<li><a href="#rand">rand()</a></li>
+<li><a href="#randBit">randBit()</a></li>
+<li><a href="#randHex">randHex()</a></li>
+<li><a href="#randInt">randInt()</a></li>
+<li><a href="#randSign">randSign()</a></li>
+<li><a href="#random">random()</a></li>
+</ul>
+
+<h2>choice(...items):* <a href="#choice" id="choice" class="deep-link">#</a></h2>
+
+<p>Returns a random element from the supplied arguments or from an array if single
+argument is an array.</p>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+choice(1, 2, 3, 4, 5); // 3
+
+var arr = ['lorem', 'ipsum', 'dolor'];
+choice(arr); // 'dolor'
+</pre>
+
+<h2>guid():String <a href="#guid" id="guid" class="deep-link">#</a></h2>
+
+<p>Generates a pseudo-random <a href="http://en.wikipedia.org/wiki/Globally_unique_identifier">Globally Unique Identifier</a> (v4).</p>
+
+<p>Since the total number of GUIDs is 2<sup>122</sup> the chance of generating the
+same value twice is negligible.</p>
+
+<p><strong>Important:</strong> this method uses <code>Math.random</code> by default so the UUID isn't
+<em>safe</em> (sequence of outputs can be predicted in some cases), check the
+<a href="#random"><code>random()</code></a> documentation for more info on how to replace the default
+PRNG if you need extra safety or need <em>seeded</em> results.</p>
+
+<p>See: <a href="#randHex"><code>randHex()</code></a>, <a href="#random"><code>random()</code></a></p>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+guid();      // 830e9f50-ac7f-4369-a14f-ed0e62b2fa0b
+guid();      // 5de3d09b-e79c-4727-932b-48c49228d508
+</pre>
+
+<h2>rand([min], [max]):Number <a href="#rand" id="rand" class="deep-link">#</a></h2>
+
+<p>Gets a random number inside range or snap to min/max values.</p>
+
+<h3>Arguments:</h3>
+
+<ol>
+<li><code>[min]</code> (Number)         : Minimum value. Defaults to <code>number/MIN_INT</code>.</li>
+<li><code>[max]</code> (Number)         : Maximum value. Defaults to <code>number/MAX_INT</code>.</li>
+</ol>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+rand();      // 448740433.55274725
+rand();      // -31797596.097682
+rand(0, 10); // 7.369723
+rand(0, 10); // 5.987042
+</pre>
+
+<p>See: <a href="#random"><code>random()</code></a></p>
+
+<h2>randBit():Number <a href="#randBit" id="randBit" class="deep-link">#</a></h2>
+
+<p>Returns a random "bit" (0 or 1). Useful for addition/subtraction.</p>
+
+<p>It's slightly faster than <code>choice(0, 1)</code> since implementation is simpler (not
+that it will make a huge difference in most cases).</p>
+
+<p>See: <a href="#choice"><code>choice()</code></a></p>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+randBit(); // 1
+randBit(); // 0
+
+//same effect as
+choice(0, 1);
+</pre>
+
+<h2>randHex([size]):String <a href="#randHex" id="randHex" class="deep-link">#</a></h2>
+
+<p>Returns a random hexadecimal string.</p>
+
+<p>The default <code>size</code> is <code>6</code>.</p>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+randHex();   // "dd8575"
+randHex();   // "e6baeb"
+randHex(2);  // "a2"
+randHex(30); // "effd7e2ad9a4a3067e30525fab983a"
+</pre>
+
+<h2>randInt([min], [max]):Number <a href="#randInt" id="randInt" class="deep-link">#</a></h2>
+
+<p>Gets a random integer inside range or snap to min/max values.</p>
+
+<h3>Arguments:</h3>
+
+<ol>
+<li><code>[min]</code> (Number)         : Minimum value. Defaults to <code>number/MIN_INT</code>.</li>
+<li><code>[max]</code> (Number)         : Maximum value. Defaults to <code>number/MAX_INT</code>.</li>
+</ol>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+randInt();      // 448740433
+randInt();      // -31797596
+randInt(0, 10); // 7
+randInt(0, 10); // 5
+</pre>
+
+<h2>randSign():Number <a href="#randSign" id="randSign" class="deep-link">#</a></h2>
+
+<p>Returns a random "sign" (-1 or 1). Useful for multiplications.</p>
+
+<p>It's slightly faster than <code>choice(-1, 1)</code> since implementation is simpler (not
+that it will make a huge difference in most cases).</p>
+
+<p>See: <a href="#choice"><code>choice()</code></a></p>
+
+<h3>Example:</h3>
+
+<pre class="brush:js">
+
+randSign(); // -1
+randSign(); // 1
+
+//same effect as
+choice(-1, 1);
+</pre>
+
+<h2>random():Number <a href="#random" id="random" class="deep-link">#</a></h2>
+
+<p>Returns a random number between <code>0</code> and <code>1</code>. Same as <code>Math.random()</code>.</p>
+
+<pre class="brush:js">
+
+random(); // 0.35435103671625257
+random(); // 0.8768321881070733
+</pre>
+
+<p><strong>Important:</strong> No methods inside mout should call <code>Math.random()</code>
+directly, they all use <code>random/random</code> as a proxy, that way we can
+inject/replace the pseudo-random number generator if needed (ie. in case we
+need a seeded random or a better algorithm than the native one).</p>
+
+<h3>Replacing the PRNG</h3>
+
+<p>In some cases we might need better/different algorithms than the one provided
+by <code>Math.random</code> (ie. safer, seeded).</p>
+
+<p>Because of licensing issues, file size limitations and different needs we
+decided to <strong>not</strong> implement a custom PRNG and instead provide a easy way to
+override the default behavior. - <a href="https://github.com/millermedeiros/amd-utils/issues/99">issue #99</a></p>
+
+<p>If you are using mout with a loader that supports the <a href="https://github.com/amdjs/amdjs-api/wiki/Common-Config">AMD map
+config</a>, such as
+<a href="http://requirejs.org/">RequireJS</a>, you can use it to replace the PRNG
+(recommended approach):</p>
+
+<pre class="brush:js">
+
+requirejs.config({
+    map : {
+        // all modules will load "my_custom_prng" instead of
+        // "mout/random/random"
+        '*' : {
+            'mout/random/random' : 'my_custom_prng'
+        }
+    }
+});
+</pre>
+
+<p>You also have the option to override <code>random.get</code> in case you are using
+mout on node.js or with a loader which doesn't support the map config:</p>
+
+<pre class="brush:js">
+
+// replace the PRNG
+var n = 0;
+random.get = function(){
+    return ++n % 2? 0 : 1; // not so random :P
+};
+random(); // 0
+random(); // 1
+random(); // 0
+random(); // 1
+</pre>
+
+<p>See this <a href="http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript">detailed explanation about PRNG in
+JavaScript</a>
+to understand the issues with the native <code>Math.random</code> and also for a list of
+algorithms that could be used instead.</p>
+
+<hr />
+
+<p>For more usage examples check specs inside <code>/tests</code> folder. Unit tests are the
+best documentation you can get...</p>
+                <hr />
+                <small>Documentation generated by <a href="https://github.com/millermedeiros/mdoc">mdoc</a>.</small>
+            </div>
+        </div>
+        <script src="assets_/js/lib/jquery.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shCore.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shAutoloader.js"></script>
+        <script src="assets_/js/main.js"></script>
+    </body>
+</html>

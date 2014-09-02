@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>date : mout : Modular JavaScript Utilities</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets_/css/shCore.css">
+        <link rel="stylesheet" href="assets_/css/shThemeDefault.css">
+        <link rel="stylesheet" href="assets_/css/main.css">
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-1247729-20']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+    </head>
+    <body data-root-path="">
+        <div id="wrapper">
+            <div id="content">
+
+<ul id="topnav">
+    <li><a href="index.html">Index</a></li>
+    <li><a href="#toc">TOC</a></li>
+    <li><a id="inject-link" href="#/inject" title="Inject modules into a 'mout' object on the global scope so you can use the browser console to test them.">Console<sup>?</sup></a></li>
+</ul>
+<h1>date</h1>
+
+<p>Date utilities.</p>
+
+<h2>Table of Contents <a href="#toc" name="toc" class="deep-link">#</a></h2>
+
+<ul>
+<li><a href="#dayOfTheYear">dayOfTheYear()</a></li>
+<li><a href="#diff">diff()</a></li>
+<li><a href="#isLeapYear">isLeapYear()</a></li>
+<li><a href="#isSame">isSame()</a></li>
+<li><a href="#parseIso">parseIso()</a></li>
+<li><a href="#quarter">quarter()</a></li>
+<li><a href="#startOf">startOf()</a></li>
+<li><a href="#strftime">strftime()</a></li>
+<li><a href="#timezoneAbbr">timezoneAbbr()</a></li>
+<li><a href="#timezoneOffset">timezoneOffset()</a></li>
+<li><a href="#totalDaysInMonth">totalDaysInMonth()</a></li>
+<li><a href="#totalDaysInYear">totalDaysInYear()</a></li>
+<li><a href="#weekOfTheYear">weekOfTheYear()</a></li>
+</ul>
+
+<h2>dayOfTheYear(date):Number <a href="#dayOfTheYear" id="dayOfTheYear" class="deep-link">#</a></h2>
+
+<p>How many days elapsed since begining of the year (following gregorian
+calendar).</p>
+
+<pre class="brush:js">
+
+// Jan 1st
+dayOfTheYear(new Date(2013, 0, 1)); // 1
+// Dec 31th
+dayOfTheYear(new Date(2013, 11, 31)); // 364
+</pre>
+
+<h2>diff(date1, date2, [unitName]):Number <a href="#diff" id="diff" class="deep-link">#</a></h2>
+
+<p>Calculate the difference between dates (range).</p>
+
+<p>The returned value is always positive. The default <code>unitName</code> is <code>"ms"</code>.</p>
+
+<p>Available units: <code>year</code>, <code>month</code>, <code>week</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code>,
+<code>millisecond</code>.</p>
+
+<p>See: <a href="time.html#convert"><code>time/convert()</code></a></p>
+
+<pre class="brush:js">
+
+var d1 = new Date(2012, 4, 5);
+var d2 = new Date(2013, 4, 8);
+diff(d1, d2);          // 31795200000
+diff(d1, d2, 'hour');  // 8832
+diff(d1, d2, 'week');  // 52.57142857142857
+diff(d1, d2, 'month'); // 12.096774193548388
+diff(d1, d2, 'year');  // 1.0082191780821919
+</pre>
+
+<h2>isLeapYear(fullYear|date):Boolean <a href="#isLeapYear" id="isLeapYear" class="deep-link">#</a></h2>
+
+<p>Checks if it's a <a href="http://en.wikipedia.org/wiki/Leap_year">leap year</a> according
+to the Gregorian calendar.</p>
+
+<p>see: <a href="#totalDaysInMonth"><code>totalDaysInMonth()</code></a></p>
+
+<pre class="brush:js">
+
+isLeapYear(2012); // true
+isLeapYear(2013); // false
+isLeapYear(new Date(2012, 2, 28)); // true
+</pre>
+
+<h2>isSame(date1, date2[, period]):Boolean <a href="#isSame" id="isSame" class="deep-link">#</a></h2>
+
+<p>Check if both dates are the "same".</p>
+
+<p>You can pass an optional <em>period</em> used to set the comparisson precision.</p>
+
+<p>Available periods: <code>year</code>, <code>month</code>, <code>week</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code>.</p>
+
+<pre class="brush:js">
+
+var date1 = new Date(2013, 1, 3);
+var date2 = new Date(2013, 2, 9);
+isSame(date1, date2);          // false
+isSame(date1, date2, 'day');   // false
+isSame(date1, date2, 'month'); // false
+isSame(date1, date2, 'year');  // true
+</pre>
+
+<h2>parseIso(str):Number <a href="#parseIso" id="parseIso" class="deep-link">#</a></h2>
+
+<p>Parses an <a href="http://en.wikipedia.org/wiki/Iso8601">ISO8601</a> date and returns the
+number of milliseconds since January 1, 1970, 00:00:00 UTC, or <code>NaN</code> if it is
+not a valid ISO8601 date.</p>
+
+<p>This parses <em>all</em> ISO8601 dates, including dates without times, <a href="https://en.wikipedia.org/wiki/ISO_8601#Ordinal_dates">ordinal
+dates</a>, and the compact
+representation (omitting delimeters). The only exception is <a href="https://en.wikipedia.org/wiki/ISO_week_date">ISO week
+dates</a>, which are not parsed.</p>
+
+<p>If no time zone offset is specified, it assumes UTC time.</p>
+
+<pre class="brush:js">
+
+// Jan 01, 1970 00:00 GMT
+parseIso('1970-01-01T00:00:00')    // 0
+parseIso('1970-001')               // 0
+parseIso('1970-01-01')             // 0
+parseIso('19700101T000000.00')     // 0
+parseIso('1970-01-01T02:00+02:00') // 0
+
+// Jan 02, 2000 20:10 GMT+04:00
+parseIso('2000-01-02T20:10+04:00') // 946829400000
+</pre>
+
+<h2>quarter(date):Number <a href="#quarter" id="quarter" class="deep-link">#</a></h2>
+
+<p>Get a number between 1 to 4 that represents the quarter of the year.</p>
+
+<pre class="brush:js">
+
+quarter(new Date(2013, 1, 19)); // 1
+quarter(new Date(2013, 4, 12)); // 2
+quarter(new Date(2013, 7, 25)); // 3
+quarter(new Date(2013, 10, 8)); // 4
+</pre>
+
+<h2>startOf(date, period):Date <a href="#startOf" id="startOf" class="deep-link">#</a></h2>
+
+<p>Get a new Date at the start of the period.</p>
+
+<p>Available periods: <code>year</code>, <code>month</code>, <code>week</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code>.</p>
+
+<pre class="brush:js">
+
+// Apr 05 2013 11:27:43
+var date = new Date(2013, 3, 5, 11, 27, 43, 123);
+startOf(date, 'year');  // Jan 01 2013 00:00:00
+startOf(date, 'month'); // Apr 01 2013 00:00:00
+startOf(date, 'day');   // Apr 05 2013 00:00:00
+startOf(date, 'hour');  // Apr 05 2013 11:00:00
+</pre>
+
+<h2>strftime(date, format, [l10n]):String <a href="#strftime" id="strftime" class="deep-link">#</a></h2>
+
+<p>Format date based on strftime format.</p>
+
+<p>Replaced tokens:</p>
+
+<dl>
+<dt>%a</dt><dd> locale's abbreviated weekday name.</dd>
+<dt>%A</dt><dd> locale's full weekday name.</dd>
+<dt>%b</dt><dd> locale's abbreviated month name.</dd>
+<dt>%B</dt><dd> locale's full month name.</dd>
+<dt>%c</dt><dd> locale's appropriate date and time representation.</dd>
+<dt>%C</dt><dd> century number (the year divided by 100 and truncated
+to an integer) as a decimal number [00..99].</dd>
+<dt>%d</dt><dd> day of the month as a decimal number [01..31].</dd>
+<dt>%D</dt><dd>same as %m/%d/%y.</dd>
+<dt>%e</dt><dd> day of the month as a decimal number [1..31];
+a single digit is preceded by a space.</dd>
+<dt>%F</dt><dd>The ISO 8601 date format (%Y-%m-%d)</dd>
+<dt>%h</dt><dd>same as %b.</dd>
+<dt>%H</dt><dd> hour (24-hour clock) as a decimal number [00..23].</dd>
+<dt>%I</dt><dd> hour (12-hour clock) as a decimal number [01..12].</dd>
+<dt>%j</dt><dd> day of the year as a decimal number [001..366].</dd>
+<dt>%l</dt><dd> hour (12-hour clock) as a decimal number (range 1 to 12); single digits are preceded by a blank</dd>
+<dt>%L</dt><dd> zero-padded milliseconds [000..999]</dd>
+<dt>%m</dt><dd> month as a decimal number [01..12].</dd>
+<dt>%M</dt><dd> minute as a decimal number [00..59].</dd>
+<dt>%n</dt><dd> newline character.</dd>
+<dt>%p</dt><dd> locale's equivalent of either "am" or "pm"</dd>
+<dt>%P</dt><dd> locale's equivalent of either "AM" or "PM"</dd>
+<dt>%r</dt><dd> time in a.m. and
+p.m. notation; in the POSIX locale this is equivalent to %I:%M:%S %p.</dd>
+<dt>%R</dt><dd> time in 24 hour notation (%H:%M).</dd>
+<dt>%s</dt><dd> seconds since Epoch (1970-01-01 00:00:00 UTC)</dd>
+<dt>%S</dt><dd> second as a decimal number [00..60].</dd>
+<dt>%t</dt><dd> tab character.</dd>
+<dt>%T</dt><dd> time (%H:%M:%S).</dd>
+<dt>%u</dt><dd> weekday as a decimal number [1..7], with 1 representing
+Monday.</dd>
+<dt>%U</dt><dd> week number of the year (Sunday as the first day of
+the week) as a decimal number [00..53].</dd>
+<del><dt>%V</dt><dd> week number of the year (Monday as the first day of the
+week) as a decimal number [01..53].  If the week containing 1 January has
+four or more days in the new year, then it is considered week 1. Otherwise,
+it is the last week of the previous year, and the next week is week 1.</dd></del>
+<dt>%w</dt><dd> weekday as a decimal number [0..6], with 0 representing
+Sunday.</dd>
+<dt>%W</dt><dd> week number of the year (Monday as the first day of
+the week) as a decimal number [00..53].  All days in a new year preceding
+the first Monday are considered to be in week 0.</dd>
+<dt>%x</dt><dd> locale's appropriate date representation.</dd>
+<dt>%X</dt><dd> locale's appropriate time representation.</dd>
+<dt>%y</dt><dd> year without century as a decimal number [00..99].</dd>
+<dt>%Y</dt><dd> year with century as a decimal number.</dd>
+<dt>%Z</dt><dd> timezone name or abbreviation, or by no bytes
+if no timezone information exists.</dd>
+<dt>%%</dt><dd>is replaced by %.</dd>
+</dl>
+
+<pre class="brush:js">
+
+var date = new Date(2013, 3, 8, 9, 2, 4);
+strftime(date, '%Y-%m-%d'); // "2013-04-08"
+strftime(date, '%R'); // "09:02"
+strftime(date, '%Y-%m-%dT%H:%M:%S%z'); // "2013-04-08T09:02:04+0000"
+</pre>
+
+<p>You can also set a custom locale:</p>
+
+<pre class="brush:js">
+
+var ptBr = require('mout/date/i18n/pt-BR');
+strftime(date, '%a, %d %b', ptBr); // 'Seg, 08 Abr'
+strftime(date, '%A, %d %B', ptBr); // 'Segunda, 08 Abril'
+</pre>
+
+<p>To set it globally:</p>
+
+<pre class="brush:js">
+
+require('mout/date/i18n_').set( customLocaleData );
+</pre>
+
+<p>See <a href="https://github.com/mout/mout/tree/master/src/date/i18n">date/i18n</a>
+for localization examples.</p>
+
+<h2>timezoneAbbr(date):String <a href="#timezoneAbbr" id="timezoneAbbr" class="deep-link">#</a></h2>
+
+<p>Return timezone abbreviation or similar data.</p>
+
+<p>The result will vary based on the OS/browser since some environments doesn't
+provide enough info about the current locale.</p>
+
+<pre class="brush:js">
+
+// IE 7-8
+timezoneAbbr(new Date()); // "-0500"
+// Chrome, FF, V8
+timezoneAbbr(new Date()); // "EST"
+</pre>
+
+<h2>timezoneOffset(date):String <a href="#timezoneOffset" id="timezoneOffset" class="deep-link">#</a></h2>
+
+<p>Return time zone as hour and minute offset from UTC (e.g. +0900).</p>
+
+<p>It's important to note that JavaScript Date object will use the system locale
+info to determinate the <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/getTimezoneOffset">timezone
+offset</a>
+and that daylight saving time affects the result.</p>
+
+<pre class="brush:js">
+
+// if system locale is EST
+timezoneOffset(new Date()); // -0500
+</pre>
+
+<h2>totalDaysInMonth(fullYear, monthIndex):Number <a href="#totalDaysInMonth" id="totalDaysInMonth" class="deep-link">#</a></h2>
+
+<p>Returns the amount of days in the month taking into consideration leap years
+(following Gregorian calendar).</p>
+
+<p>see: <a href="#isLeapYear"><code>isLeapYear()</code></a></p>
+
+<pre class="brush:js">
+
+totalDaysInMonth(2008, 1); // 29 (leap year)
+totalDaysInMonth(2009, 1); // 28
+
+// you can also pass a Date object as single argument
+totalDaysInMonth( new Date(2013, 0, 1) ); // 31
+</pre>
+
+<h2>totalDaysInYear(fullYear):Number <a href="#totalDaysInYear" id="totalDaysInYear" class="deep-link">#</a></h2>
+
+<p>Returns the amount of days in the year taking into consideration leap years
+(following Gregorian calendar).</p>
+
+<p>see: <a href="#isLeapYear"><code>isLeapYear()</code></a>, <a href="#totalDaysInMonth"><code>totalDaysInMonth()</code></a></p>
+
+<pre class="brush:js">
+
+totalDaysInYear(2008); // 366 (leap year)
+totalDaysInYear(2009); // 365
+
+// you can also pass a Date object as single argument
+totalDaysInYear( new Date(2013, 0, 1) ); // 365
+</pre>
+
+<h2>weekOfTheYear(date, [firstDayOfWeek]):Number <a href="#weekOfTheYear" id="weekOfTheYear" class="deep-link">#</a></h2>
+
+<p>Returns how many weeks elapsed since start of the year (<code>0..53</code>).</p>
+
+<p><code>firstDayOfWeek</code> can be <code>0</code> (Sunday) or <code>1</code> (Monday). By default weeks start at
+Sunday.</p>
+
+<p>It will return <code>0</code> if <code>date</code> is before the first <code>firstDayOfWeek</code> of the year.</p>
+
+<pre class="brush:js">
+
+// Tue Jan 01 2013
+weekOfTheYear( new Date(2013,0,1) ); // 0
+// Wed Jan 09 2013
+weekOfTheYear( new Date(2013,0,9) ); // 1
+// Sun Jan 01 2012
+weekOfTheYear( new Date(2012,0,1) ); // 1
+// Mon Jan 09 2012
+weekOfTheYear( new Date(2012,0,9) ); // 2
+</pre>
+
+<hr />
+
+<p>For more usage examples check specs inside <code>/tests</code> folder. Unit tests are the
+best documentation you can get...</p>
+                <hr />
+                <small>Documentation generated by <a href="https://github.com/millermedeiros/mdoc">mdoc</a>.</small>
+            </div>
+        </div>
+        <script src="assets_/js/lib/jquery.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shCore.js"></script>
+        <script src="assets_/js/lib/syntax-highlighter/shAutoloader.js"></script>
+        <script src="assets_/js/main.js"></script>
+    </body>
+</html>
+
